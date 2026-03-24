@@ -11,7 +11,6 @@
         .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 420px; text-align: center; }
         .logo { max-width: 130px; margin-bottom: 20px; }
         
-        /* Formulaire */
         .input-group { position: relative; text-align: left; margin-bottom: 15px; }
         label { display: block; font-size: 0.85em; font-weight: bold; color: #444; margin-bottom: 5px; }
         input, select, button { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 15px; box-sizing: border-box; }
@@ -20,11 +19,9 @@
         button { background: var(--obs-red); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         button:hover { background: #a5181d; transform: translateY(-1px); }
 
-        /* Oeil Mot de passe (Centré) */
         .toggle-pass { position: absolute; right: 12px; top: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--icon-color); z-index: 10; }
         .toggle-pass svg { width: 20px; height: 20px; }
 
-        /* Carte Wi-Fi Résultat */
         #wifiCard { display: none; margin-top: 20px; padding: 25px; border: 2px solid var(--obs-red); border-radius: 15px; text-align: left; animation: fadeIn 0.4s; }
         .wifi-row { margin-bottom: 15px; }
         .label-small { color: #888; text-transform: uppercase; font-size: 10px; font-weight: bold; display: block; margin-bottom: 2px; }
@@ -34,7 +31,6 @@
         .copy-icon-btn { background: none; border: none; padding: 5px; cursor: pointer; color: var(--icon-color); display: flex; width: auto; margin: 0; }
         .copy-icon-btn:hover { color: var(--obs-red); transform: scale(1.1); }
 
-        /* Aide OS */
         .help-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
         .os-selector { display: flex; justify-content: space-around; margin-bottom: 15px; gap: 10px; }
         .os-btn { background: #eee; color: #333; padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; border: 1px solid transparent; width: 50%; text-align: center; font-weight: bold; }
@@ -63,24 +59,24 @@
                 <label>Votre Catégorie</label>
                 <select id="userType" required>
                     <option value="" disabled selected>-- Sélectionner --</option>
-                    <option value="v10">Administration / Profs</option>
-                    <option value="v20">Élèves / Étudiants</option>
-                    <option value="v30">Locataires / Public</option>
+                    <option value="v10">Administratif / Comptabilité</option>
+                    <option value="v20">Étudiant</option>
+                    <option value="v30">Locataire</option>
                 </select>
             </div>
             <div class="input-group">
-                <label>Code d'accès</label>
-                <input type="password" id="catPass" placeholder="Entrez le code catégorie" required>
+                <label>Code d'accès catégorie</label>
+                <input type="password" id="catPass" placeholder="Entrez le code" required>
                 <span class="toggle-pass" onclick="toggleVisibility()">
                     <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </span>
             </div>
-            <button type="submit">Afficher les accès</button>
+            <button type="submit">Afficher les accès Wi-Fi</button>
         </form>
     </div>
 
     <div id="wifiCard">
-        <div style="font-weight:bold; color:var(--obs-red); margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px">CONFIG RÉSEAU</div>
+        <div style="font-weight:bold; color:var(--obs-red); margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px">VOS ACCÈS</div>
         
         <div class="wifi-row">
             <span class="label-small">Nom du Réseau (SSID)</span>
@@ -88,43 +84,43 @@
         </div>
 
         <div class="wifi-row">
-            <span class="label-small">Mot de Passe</span>
+            <span class="label-small">Mot de Passe Wi-Fi</span>
             <div class="copy-wrapper">
                 <b id="resPass" class="value-text" style="color: var(--obs-red);"></b>
-                <button type="button" class="copy-icon-btn" onclick="copyText()" title="Copier le mot de passe">
+                <button type="button" class="copy-icon-btn" onclick="copyText()" title="Copier">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
             </div>
         </div>
 
         <div class="help-section">
-            <p style="font-size:0.8em; font-weight:bold; margin-bottom:10px">Où se connecter ?</p>
+            <p style="font-size:0.8em; font-weight:bold; margin-bottom:10px">Aide à la connexion :</p>
             <div class="os-selector">
                 <div class="os-btn" id="btnWin" onclick="showHelp('win')">🖥️ Windows</div>
                 <div class="os-btn" id="btnMac" onclick="showHelp('mac')">💻 MacBook</div>
             </div>
 
             <div id="guideWin" class="os-guide">
-                Regardez en <b>bas à droite</b> de votre écran.
+                Icône réseau en <b>bas à droite</b>.
                 <img src="unnamed.jpeg" alt="Aide Windows">
             </div>
 
             <div id="guideMac" class="os-guide">
-                Regardez en <b>haut à droite</b> (Centre de contrôle).
+                Centre de contrôle en <b>haut à droite</b>.
                 <img src="macos help.png" alt="Aide Mac">
             </div>
         </div>
         
-        <button onclick="window.location.reload()" style="background:#444; font-size:11px; margin-top:20px">Nouvelle recherche</button>
+        <button onclick="window.location.reload()" style="background:#444; font-size:11px; margin-top:20px">Retour</button>
     </div>
 </div>
 
 <script>
-    // BASE DE DONNEES MISE À JOUR
+    // BASE DE DONNEES MISE À JOUR SELON TES INSTRUCTIONS
     const networkDb = {
-        'v10': { key: 'Vlan10', ssid: 'Box-Administratif-OBS', pass: 'MJRK-2023-2026@' },
-        'v20': { key: 'Vlan20', ssid: 'Box-Étudiant-OBS', pass: 'OBS100reussiteen2024' },
-        'v30': { key: 'Vlan30', ssid: 'Box-local-bs', pass: 'LOBS-team-26' }
+        'v10': { key: 'éducbs', ssid: 'Box-Administratif-OBS', pass: 'MJRK-2023-2026@' },
+        'v20': { key: 'obs26', ssid: 'Box-Étudiant-OBS', pass: 'OBS100reussiteen2024' },
+        'v30': { key: 'locbs26', ssid: 'Box-local-bs', pass: 'LOBS-team-26' }
     };
 
     let attempts = 0;
@@ -135,7 +131,7 @@
             const timeLeft = Math.ceil((lockUntil - Date.now()) / 60000);
             document.getElementById('authArea').style.display = 'none';
             document.getElementById('lockMsg').style.display = 'block';
-            document.getElementById('lockMsg').innerHTML = `Accès temporairement bloqué.<br>Réessayez dans ${timeLeft} min.`;
+            document.getElementById('lockMsg').innerHTML = `Sécurité : Accès bloqué.<br>Réessayez dans ${timeLeft} min.`;
             return true;
         }
         return false;
@@ -170,7 +166,7 @@
     function copyText() {
         const text = document.getElementById('resPass').innerText;
         navigator.clipboard.writeText(text).then(() => {
-            alert("✅ Mot de passe copié !");
+            alert("Copié dans le presse-papier !");
         });
     }
 
@@ -184,7 +180,6 @@
 
         if (config && inputKey === config.key) {
             attempts = 0;
-            localStorage.removeItem('obs_total_errors');
             document.getElementById('authArea').style.display = 'none';
             document.getElementById('resBox').innerText = config.ssid;
             document.getElementById('resPass').innerText = config.pass;
@@ -196,10 +191,7 @@
             errorDiv.innerText = `⚠️ Code incorrect (${attempts}/3)`;
 
             if (attempts >= 3) {
-                const totalErrors = parseInt(localStorage.getItem('obs_total_errors') || 0) + 1;
-                localStorage.setItem('obs_total_errors', totalErrors);
-                const lockDuration = totalErrors > 1 ? 10 * 60000 : 5 * 60000;
-                localStorage.setItem('obs_lock_until', Date.now() + lockDuration);
+                localStorage.setItem('obs_lock_until', Date.now() + 5 * 60000);
                 checkLock();
             }
         }
