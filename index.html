@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Sécurisé OBS</title>
+    
+    <link rel="icon" type="image/jpeg" href="unnamed.jpg">
+
     <style>
         :root { --obs-red: #c61d23; --dark: #1a1a1a; --gray: #f4f4f9; --icon-color: #666; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--gray); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
@@ -48,7 +51,7 @@
 <body>
 
 <div class="container">
-    <img src="images.jpeg" alt="Logo OBS" class="logo">
+    <img src="unnamed.jpg" alt="Logo OBS" class="logo">
     <div id="lockMsg"></div>
 
     <div id="authArea">
@@ -116,9 +119,10 @@
 </div>
 
 <script>
+    // BASE DE DONNEES MISE À JOUR
     const networkDb = {
         'v10': { key: 'éducbs', ssid: 'Box-Administratif-OBS', pass: 'MJRK-2023-2026@' },
-        'v20': { key: 'obs26', ssid: 'Box-Étudiant-OBS', pass: 'OBS100reussiteen2024' },
+        'v20': { key: 'obs26', ssid: 'Box-Étudiant-OBS', pass: 'obs@-promo-2026' }, // Nouveau MDP ici
         'v30': { key: 'locbs26', ssid: 'Box-loca-bs', pass: 'LOBS-team-26' }
     };
 
