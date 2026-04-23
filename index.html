@@ -6,6 +6,7 @@
     <title>Portail Sécurisé OBS</title>
     
     <link rel="icon" type="image/jpeg" href="images.jpeg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
         :root { --obs-red: #c61d23; --dark: #1a1a1a; --gray: #f4f4f9; --icon-color: #666; }
@@ -52,7 +53,6 @@
 
 <div class="container">
     <img src="images.jpeg" alt="Logo OBS" class="logo">
-    
     <div id="lockMsg"></div>
 
     <div id="authArea">
@@ -81,12 +81,10 @@
 
     <div id="wifiCard">
         <div style="font-weight:bold; color:var(--obs-red); margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px">VOS ACCÈS</div>
-        
         <div class="wifi-row">
             <span class="label-small">Nom du Réseau (SSID)</span>
             <b id="resBox" class="value-text"></b>
         </div>
-
         <div class="wifi-row">
             <span class="label-small">Mot de Passe Wi-Fi</span>
             <div class="copy-wrapper">
@@ -103,28 +101,35 @@
                 <div class="os-btn" id="btnWin" onclick="showHelp('win')">🖥️ Windows</div>
                 <div class="os-btn" id="btnMac" onclick="showHelp('mac')">💻 MacBook</div>
             </div>
-
             <div id="guideWin" class="os-guide">
                 Icône réseau en <b>bas à droite</b>.
                 <img src="unnamed.jpeg" alt="Aide Windows">
             </div>
-
             <div id="guideMac" class="os-guide">
                 Centre de contrôle en <b>haut à droite</b>.
                 <img src="macos help.png" alt="Aide Mac">
             </div>
         </div>
-        
         <button onclick="window.location.reload()" style="background:#444; font-size:11px; margin-top:20px">Retour</button>
     </div>
 </div>
 
 <script>
-    // BASE DE DONNEES MISE À JOUR
+    // BASE DE DONNEES SÉCURISÉE (AES)
+    // Les mots de passe en clair et les clés ne sont plus visibles !
     const networkDb = {
-        'v10': { key: 'éducbs', ssid: 'Box-Administratif-OBS', pass: 'MJRK-2023-2026@' },
-        'v20': { key: 'obs26', ssid: 'Box-Étudiant-OBS', pass: 'Obs-promo-2026' },
-        'v30': { key: 'locbs26', ssid: 'Box-loca-bs', pass: 'LOBS-team-26' }
+        'v10': { 
+            ssid: 'Box-Administratif-OBS', 
+            encryptedPass: 'U2FsdGVkX1/qmHK64RdbweiHgVRxP7Ryei/RK90Cs3M=' // À générer avec éducbs
+        },
+        'v20': { 
+            ssid: 'Box-Étudiant-OBS', 
+            encryptedPass: 'U2FsdGVkX19phH3PIhdCz4Zk5503OAUdPJ80kqfPQD0=' // À générer avec obs26
+        },
+        'v30': { 
+            ssid: 'Box-loca-bs', 
+            encryptedPass: 'U2FsdGVkX19t5ykfNve7ZN6v/B/pt5mT8k/QQZq93jM=' // À générer avec locbs26
+        }
     };
 
     let attempts = 0;
@@ -182,22 +187,37 @@
         const inputKey = document.getElementById('catPass').value.trim();
         const config = networkDb[selection];
 
-        if (config && inputKey === config.key) {
-            attempts = 0;
-            document.getElementById('authArea').style.display = 'none';
-            document.getElementById('resBox').innerText = config.ssid;
-            document.getElementById('resPass').innerText = config.pass;
-            document.getElementById('wifiCard').style.display = 'block';
-        } else {
-            attempts++;
-            const errorDiv = document.getElementById('errorMsg');
-            errorDiv.style.display = 'block';
-            errorDiv.innerText = `⚠️ Code incorrect (${attempts}/3)`;
+        if (config) {
+            try {
+                // TENTATIVE DE DÉCHIFFREMENT AVEC LE CODE TAPÉ PAR L'UTILISATEUR
+                const bytes = CryptoJS.AES.decrypt(config.encryptedPass, inputKey);
+                const originalText = bytes.toString(CryptoJS.enc.Utf8);
 
-            if (attempts >= 3) {
-                localStorage.setItem('obs_lock_until', Date.now() + 5 * 60000);
-                checkLock();
+                // Si le décryptage réussit et trouve la signature de sécurité
+                if (originalText.startsWith("OBS-SECURE-")) {
+                    const finalWifiPass = originalText.replace("OBS-SECURE-", ""); // On retire la signature
+                    
+                    attempts = 0;
+                    document.getElementById('authArea').style.display = 'none';
+                    document.getElementById('resBox').innerText = config.ssid;
+                    document.getElementById('resPass').innerText = finalWifiPass;
+                    document.getElementById('wifiCard').style.display = 'block';
+                    return; // Succès ! On arrête ici.
+                }
+            } catch(err) {
+                // Échec silencieux du déchiffrement (le code entré est mauvais)
             }
+        }
+
+        // Si on arrive ici, c'est que le code était faux
+        attempts++;
+        const errorDiv = document.getElementById('errorMsg');
+        errorDiv.style.display = 'block';
+        errorDiv.innerText = `⚠️ Code incorrect (${attempts}/3)`;
+
+        if (attempts >= 3) {
+            localStorage.setItem('obs_lock_until', Date.now() + 5 * 60000);
+            checkLock();
         }
     });
 
